@@ -1,19 +1,22 @@
 import React from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { Home, Package, PlusCircle, List, User } from 'lucide-react'
+import { Home, Package, PlusCircle, List, User, Settings as SettingsIcon } from 'lucide-react'
 import { useAuthStore } from '../../stores/authStore'
 
 const AppShell = () => {
   const { employee } = useAuthStore()
   
   // Tabs for Manager role
-  const managerTabs = [
+  const tabs = [
     { icon: Home, label: 'Home', path: '/' },
     { icon: Package, label: 'Inventory', path: '/inventory' },
     { icon: PlusCircle, label: 'New Sale', path: '/sale', highlight: true },
     { icon: List, label: 'My Sales', path: '/my-sales' },
+    { icon: SettingsIcon, label: 'Settings', path: '/settings', ownerOnly: true },
     { icon: User, label: 'Profile', path: '/profile' },
   ]
+
+  const filteredTabs = tabs.filter(tab => !tab.ownerOnly || employee?.role?.toLowerCase() === 'owner')
 
   return (
     <div className="min-h-screen bg-bg-primary pb-24 lg:pb-0 lg:pl-64">
@@ -41,7 +44,7 @@ const AppShell = () => {
 
       {/* Bottom Nav (Mobile/Manager) */}
       <nav className="fixed bottom-0 left-0 right-0 h-20 bg-bg-surface border-t border-border px-6 flex items-center justify-between z-50 lg:hidden">
-        {managerTabs.map((tab) => (
+        {filteredTabs.map((tab) => (
           <NavLink
             key={tab.path}
             to={tab.path}
@@ -73,7 +76,7 @@ const AppShell = () => {
         </div>
         
         <div className="flex flex-col gap-2 flex-1">
-           {managerTabs.map((tab) => (
+           {filteredTabs.map((tab) => (
              <NavLink
                key={tab.path}
                to={tab.path}
