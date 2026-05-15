@@ -51,7 +51,7 @@ const App = () => {
         {/* Protected Routes */}
         <Route 
           path="/" 
-          element={user ? <AppShell /> : <Navigate to="/login" replace />}
+          element={<AppShell />}
         >
           <Route index element={<Home />} />
           <Route path="inventory" element={<Home />} />

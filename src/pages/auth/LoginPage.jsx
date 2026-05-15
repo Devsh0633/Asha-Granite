@@ -12,8 +12,9 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!username || !password || !storeName) return
-    await login(username, password, storeName)
+    if (!username || !password) return
+    // Temporarily bypassing real login
+    await login(username, password, 'test')
   }
 
   return (
@@ -33,13 +34,6 @@ const LoginPage = () => {
         {/* Login Form */}
         <div className="w-full bg-bg-surface p-8 rounded-[24px] border border-border shadow-xl">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-            <Input
-              label="Store Name"
-              placeholder="e.g. jaipur_main"
-              value={storeName}
-              onChange={(e) => setStoreName(e.target.value.toLowerCase())}
-              required
-            />
             <Input
               label="Username"
               placeholder="Your username"
