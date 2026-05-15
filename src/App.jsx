@@ -4,6 +4,7 @@ import { useAuthStore } from './stores/authStore'
 import LoginPage from './pages/auth/LoginPage'
 import AppShell from './components/layout/AppShell'
 import SettingsPage from './pages/owner/SettingsPage'
+import InventoryPage from './pages/inventory/InventoryPage'
 
 // Placeholder Pages
 const Home = () => (
@@ -42,7 +43,7 @@ const App = () => {
           element={<AppShell />}
         >
           <Route index element={<Home />} />
-          <Route path="inventory" element={<Home />} />
+          <Route path="inventory" element={<InventoryPage />} />
           <Route path="sale" element={<Home />} />
           <Route path="my-sales" element={<Home />} />
           <Route path="profile" element={<Home />} />
