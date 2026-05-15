@@ -4,15 +4,62 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 
 const MOCK_PRODUCTS = [
-  { id: '1', name: 'Black Galaxy Granite', category: 'Granite', thickness: '18mm', finish: 'Polished', stock: 1200, unit: 'sqft', price: 185 },
-  { id: '2', name: 'Tan Brown Granite', category: 'Granite', thickness: '20mm', finish: 'Lapatro', stock: 850, unit: 'sqft', price: 145 },
-  { id: '3', name: 'White Marble Tile', category: 'Tiles', thickness: '10mm', finish: 'Glossy', stock: 5000, unit: 'pcs', price: 65 },
-  { id: '4', name: 'Alaska White', category: 'Granite', thickness: '18mm', finish: 'Polished', stock: 450, unit: 'sqft', price: 210 },
+  { 
+    id: '1', 
+    name: 'Black Galaxy Granite', 
+    category: 'Granite', 
+    thickness: '18mm', 
+    finish: 'Polished', 
+    stock: 1200, 
+    unit: 'sqft', 
+    price: 185,
+    image: 'https://images.unsplash.com/photo-1590065582384-633005a3977c?auto=format&fit=crop&q=80&w=800'
+  },
+  { 
+    id: '2', 
+    name: 'Tan Brown Granite', 
+    category: 'Granite', 
+    thickness: '20mm', 
+    finish: 'Lapatro', 
+    stock: 850, 
+    unit: 'sqft', 
+    price: 145,
+    image: 'https://images.unsplash.com/photo-1590065582384-633005a3977c?auto=format&fit=crop&q=80&w=800' // Using similar for mock
+  },
+  { 
+    id: '3', 
+    name: 'White Marble Tile', 
+    category: 'Tiles', 
+    thickness: '10mm', 
+    finish: 'Glossy', 
+    stock: 5000, 
+    unit: 'pcs', 
+    price: 65,
+    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=800'
+  },
+  { 
+    id: '4', 
+    name: 'Alaska White', 
+    category: 'Granite', 
+    thickness: '18mm', 
+    finish: 'Polished', 
+    stock: 450, 
+    unit: 'sqft', 
+    price: 210,
+    image: 'https://images.unsplash.com/photo-1590065582384-633005a3977c?auto=format&fit=crop&q=80&w=800'
+  },
 ]
 
 const InventoryPage = () => {
-  const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid')
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [adjustAmount, setAdjustAmount] = useState('')
+
+  const handleAdjust = (product) => {
+    setSelectedProduct(product)
+    setAdjustAmount('')
+  }
 
   const filteredProducts = MOCK_PRODUCTS.filter(p => 
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -71,18 +118,23 @@ const InventoryPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
             <div key={product.id} className="card-premium p-0 overflow-hidden group">
-              <div className="aspect-video bg-bg-elevated flex items-center justify-center text-text-disabled group-hover:text-accent-primary transition-colors">
-                <Package size={48} strokeWidth={1} />
+              <div className="aspect-video relative overflow-hidden bg-bg-elevated">
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-bg-primary/60 to-transparent" />
               </div>
               <div className="p-6">
                 <div className="flex items-start justify-between mb-2">
-                  <div>
+                  <div className="flex-1">
                     <span className="text-[10px] uppercase tracking-widest text-accent-primary font-bold px-2 py-1 bg-accent-primary/10 rounded-full mb-2 inline-block">
                       {product.category}
                     </span>
-                    <h3 className="font-display font-bold text-lg text-text-primary">{product.name}</h3>
+                    <h3 className="font-display font-bold text-lg text-text-primary line-clamp-1">{product.name}</h3>
                   </div>
-                  <p className="font-bold text-accent-primary">₹{product.price}</p>
+                  <p className="font-bold text-accent-primary ml-4 italic">₹{product.price}</p>
                 </div>
                 <div className="flex flex-col gap-3">
                   <div className="flex justify-between text-xs">
@@ -97,7 +149,14 @@ const InventoryPage = () => {
                         {product.stock.toLocaleString()} <span className="text-xs font-sans text-text-secondary font-normal uppercase">{product.unit}</span>
                       </span>
                     </div>
-                    <Button variant="outline" size="sm" className="h-8">Adjust</Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-8"
+                      onClick={() => handleAdjust(product)}
+                    >
+                      Adjust
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -134,12 +193,58 @@ const InventoryPage = () => {
                   </td>
                   <td className="p-4 text-right font-bold text-accent-primary">₹{product.price}</td>
                   <td className="p-4 text-center">
-                    <Button variant="outline" size="sm" className="h-8 px-3">Update</Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-8 px-3"
+                      onClick={() => handleAdjust(product)}
+                    >
+                      Update
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Adjustment Modal */}
+      {selectedProduct && (
+        <div className="fixed inset-0 bg-bg-primary/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-bg-surface border border-border rounded-[32px] w-full max-w-md p-8 shadow-2xl">
+            <h2 className="text-2xl font-display font-bold text-text-primary mb-2">Adjust Stock</h2>
+            <p className="text-text-secondary text-sm mb-6">
+              Update inventory for <span className="text-text-primary font-bold">{selectedProduct.name}</span>
+            </p>
+
+            <div className="flex flex-col gap-6">
+              <div>
+                <label className="block text-text-secondary text-sm mb-2 ml-1">Adjustment Type</label>
+                <div className="flex bg-bg-elevated p-1 rounded-card border border-border">
+                  <button className="flex-1 py-2 bg-accent-primary text-bg-primary font-bold rounded-lg text-sm">Add Stock</button>
+                  <button className="flex-1 py-2 text-text-secondary hover:text-text-primary transition-colors text-sm">Wastage</button>
+                  <button className="flex-1 py-2 text-text-secondary hover:text-text-primary transition-colors text-sm">Correction</button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-text-secondary text-sm mb-2 ml-1">Quantity ({selectedProduct.unit})</label>
+                <input
+                  type="number"
+                  placeholder="Enter amount..."
+                  value={adjustAmount}
+                  onChange={(e) => setAdjustAmount(e.target.value)}
+                  className="w-full bg-bg-elevated border border-border text-text-primary rounded-card py-3 px-4 focus:border-accent-primary focus:outline-none transition-colors"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1" onClick={() => setSelectedProduct(null)}>Cancel</Button>
+                <Button className="flex-1" onClick={() => setSelectedProduct(null)}>Save Changes</Button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

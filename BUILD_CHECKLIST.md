@@ -4,13 +4,13 @@
 - [x] 1. Supabase project setup — all tables, RLS policies, seed data (SQL Created)
 - [x] 2. React + Vite + Tailwind project scaffold
 - [x] 3. PWA manifest + service worker config
-- [ ] 4. Auth system — login page, session persistence, role routing
-- [ ] 5. Owner Settings page — business info, store details, payment info
+- [x] 4. Auth system — login page, session persistence, role routing
+- [x] 5. Owner Settings page — business info, store details, payment info
 - [ ] 6. Employee management (CRUD within settings)
-- [ ] 7. Basic navigation shell (bottom nav for manager, sidebar for owner)
+- [x] 7. Basic navigation shell (bottom nav for manager, sidebar for owner)
 
 ## PHASE 2: Inventory
-- [ ] 8. Product list page with search and filters
+- [x] 8. Product list page with search and filters
 - [ ] 9. Product detail page
 - [ ] 10. Add stock stepper (4 steps)
 - [ ] 11. Photo upload to Supabase Storage
